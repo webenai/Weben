@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weben — AI That Works For You</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0d0f14;
+      --ink-soft: #3b3f4c;
+      --ink-mute: #7a7f91;
+      --paper: #f7f8fc;
+      --white: #ffffff;
+      --accent: #1a56ff;
+      --accent-light: #e8eeff;
+      --accent-dark: #0033cc;
+      --border: #e2e5ef;
+      --radius: 12px;
+      --shadow: 0 2px 16px rgba(13,15,20,0.07);
+      --shadow-lg: 0 8px 40px rgba(13,15,20,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(247,248,252,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1160px; margin: 0 auto;
+      padding: 0 32px;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 22px;
+      color: var(--ink); text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--accent); }
+    .nav-links {
+      display: flex; gap: 32px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; color: var(--ink-soft);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      display: flex; gap: 12px; align-items: center;
+    }
+    .btn-ghost {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 500;
+      color: var(--ink-soft); background: none; border: none;
+      cursor: pointer; padding: 8px 16px; border-radius: 8px;
+      transition: background 0.2s, color 0.2s; text-decoration: none;
+    }
+    .btn-ghost:hover { background: var(--border); color: var(--ink); }
+    .btn-primary {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 500;
+      color: var(--white); background: var(--accent);
+      border: none; cursor: pointer;
+      padding: 9px 20px; border-radius: 8px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(26,86,255,0.3);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 148px 32px 100px;
+      max-width: 1160px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-light); color: var(--accent);
+      font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 6px 14px;
+      border-radius: 100px; margin-bottom: 24px;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: clamp(36px, 4.5vw, 58px);
+      line-height: 1.08; letter-spacing: -1.5px;
+      color: var(--ink); margin-bottom: 20px;
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero p {
+      font-size: 17px; color: var(--ink-soft);
+      font-weight: 300; max-width: 440px;
+      line-height: 1.7; margin-bottom: 36px;
+    }
+    .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .btn-large {
+      font-size: 15px; padding: 14px 28px; border-radius: 10px;
+    }
+    .hero-note {
+      font-size: 12px; color: var(--ink-mute); font-weight: 400;
+    }
+
+    /* Hero Visual */
+    .hero-visual {
+      position: relative;
+    }
+    .hero-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+      animation: float 5s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .card-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    }
+    .card-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, #7b9fff 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: white; font-weight: 700;
+    }
+    .card-title { font-weight: 600; font-size: 14px; }
+    .card-sub { font-size: 12px; color: var(--ink-mute); }
+    .card-metric {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+      margin-bottom: 20px;
+    }
+    .metric-box {
+      background: var(--paper); border-radius: 10px;
+      padding: 14px 12px; text-align: center;
+    }
+    .metric-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px; font-weight: 700; color: var(--ink);
+    }
+    .metric-val.up { color: #16a34a; }
+    .metric-label { font-size: 11px; color: var(--ink-mute); margin-top: 2px; }
+    .card-bar-label {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--ink-mute); margin-bottom: 6px;
+    }
+    .bar-track {
+      height: 6px; background: var(--border); border-radius: 99px; margin-bottom: 10px;
+    }
+    .bar-fill {
+      height: 100%; border-radius: 99px; background: var(--accent);
+      animation: barGrow 1.5s ease forwards;
+    }
+    @keyframes barGrow { from { width: 0%; } }
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px; }
+    .tag {
+      font-size: 11px; font-weight: 500;
+      background: var(--accent-light); color: var(--accent);
+      padding: 4px 10px; border-radius: 99px;
+    }
+
+    /* Floating badge */
+    .float-badge {
+      position: absolute; bottom: -16px; left: -20px;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 16px;
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 500;
+    }
+    .float-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: #dcfce7; display: flex; align-items: center;
+      justify-content: center; font-size: 16px;
+    }
+
+    /* ── LOGOS ── */
+    .logos-section {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 32px;
+      background: var(--white);
+    }
+    .logos-inner {
+      max-width: 1160px; margin: 0 auto;
+      display: flex; align-items: center; gap: 48px; flex-wrap: wrap;
+    }
+    .logos-label {
+      font-size: 12px; color: var(--ink-mute); font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap;
+    }
+    .logos-list { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+    .logo-item {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 16px; color: var(--border);
+      letter-spacing: -0.5px; transition: color 0.2s;
+    }
+    .logo-item:hover { color: var(--ink-mute); }
+
+    /* ── FEATURES ── */
+    .section {
+      max-width: 1160px; margin: 0 auto;
+      padding: 96px 32px;
+    }
+    .section-label {
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 800; letter-spacing: -1px;
+      color: var(--ink); margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 17px; color: var(--ink-soft);
+      font-weight: 300; max-width: 520px; line-height: 1.7;
+    }
+    .section-header { margin-bottom: 56px; }
+
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .feature-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
+    }
+    .feature-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+      border-color: rgba(26,86,255,0.2);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 20px;
+    }
+    .feature-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px; font-weight: 700; margin-bottom: 10px;
+    }
+    .feature-desc {
+      font-size: 14px; color: var(--ink-soft);
+      line-height: 1.7; font-weight: 300;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-bg {
+      background: var(--ink);
+    }
+    .how-section {
+      max-width: 1160px; margin: 0 auto;
+      padding: 96px 32px;
+    }
+    .how-section .section-label { color: #6b9fff; }
+    .how-section .section-title { color: var(--white); }
+    .how-section .section-sub { color: #a0a8bf; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .step {
+      position: relative;
+    }
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 64px; font-weight: 800;
+      color: rgba(255,255,255,0.06);
+      line-height: 1; margin-bottom: -8px;
+    }
+    .step-content {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px; font-weight: 700;
+      color: var(--white); margin-bottom: 10px;
+    }
+    .step-desc {
+      font-size: 14px; color: #a0a8bf;
+      line-height: 1.7; font-weight: 300;
+    }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .pricing-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .pricing-card.featured {
+      background: var(--ink);
+      border-color: var(--ink);
+      transform: scale(1.03);
+    }
+    .pricing-card:hover:not(.featured) {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+    .plan-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--ink-mute); margin-bottom: 20px;
+    }
+    .pricing-card.featured .plan-name { color: #6b9fff; }
+    .plan-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 44px; font-weight: 800;
+      color: var(--ink); letter-spacing: -2px; line-height: 1;
+    }
+    .pricing-card.featured .plan-price { color: var(--white); }
+    .plan-price sup { font-size: 22px; vertical-align: super; letter-spacing: 0; }
+    .plan-period { font-size: 13px; color: var(--ink-mute); margin-top: 4px; margin-bottom: 28px; }
+    .pricing-card.featured .plan-period { color: #a0a8bf; }
+    .plan-features { list-style: none; margin-bottom: 32px; }
+    .plan-features li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; color: var(--ink-soft);
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+    }
+    .pricing-card.featured .plan-features li {
+      color: #d0d5e8; border-color: rgba(255,255,255,0.07);
+    }
+    .plan-features li:last-child { border-bottom: none; }
+    .check { color: var(--accent); font-size: 15px; }
+    .pricing-card.featured .check { color: #6b9fff; }
+    .btn-outline {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 500;
+      color: var(--ink); background: none;
+      border: 1.5px solid var(--border);
+      cursor: pointer; padding: 12px 20px;
+      border-radius: 8px; width: 100%;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+    .btn-featured {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 500;
+      color: var(--ink); background: var(--white);
+      border: none; cursor: pointer;
+      padding: 12px 20px; border-radius: 8px; width: 100%;
+      transition: opacity 0.2s;
+    }
+    .btn-featured:hover { opacity: 0.88; }
+
+    /* ── CTA ── */
+    .cta-section {
+      max-width: 1160px; margin: 0 auto;
+      padding: 0 32px 96px;
+    }
+    .cta-box {
+      background: var(--accent);
+      border-radius: 20px;
+      padding: 72px 64px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute; top: -40%; right: -10%;
+      width: 400px; height: 400px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .cta-box::after {
+      content: '';
+      position: absolute; bottom: -30%; left: -5%;
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .cta-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 3.5vw, 46px);
+      font-weight: 800; color: var(--white);
+      letter-spacing: -1px; margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+    .cta-sub {
+      font-size: 17px; color: rgba(255,255,255,0.8);
+      font-weight: 300; margin-bottom: 36px;
+      position: relative; z-index: 1;
+    }
+    .btn-white {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600;
+      color: var(--accent); background: var(--white);
+      border: none; cursor: pointer;
+      padding: 14px 32px; border-radius: 10px;
+      transition: transform 0.15s, box-shadow 0.2s;
+      position: relative; z-index: 1; text-decoration: none; display: inline-block;
+    }
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1160px; margin: 0 auto;
+      padding: 48px 32px 32px;
+    }
+    .footer-top {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand p {
+      font-size: 14px; color: var(--ink-mute);
+      font-weight: 300; line-height: 1.7; margin-top: 12px;
+      max-width: 240px;
+    }
+    .footer-col h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--ink); margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a {
+      font-size: 14px; color: var(--ink-mute);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--ink); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-copy { font-size: 13px; color: var(--ink-mute); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; gap: 48px; padding-top: 120px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-card.featured { transform: none; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .logos-inner { gap: 24px; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero { padding: 110px 20px 64px; }
+      .section { padding: 64px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .cta-box { padding: 48px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="logo" href="#">Web<span>en</span></a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#footer">Company</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#" class="btn-ghost">Sign in</a>
+        <a href="#" class="btn-primary">Start free →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section>
+    <div class="hero">
+      <div class="hero-left fade-up">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Now in Public Beta
+        </div>
+        <h1>AI-powered<br/><em>SaaS</em> built<br/>for scale</h1>
+        <p>Weben gives your business a competitive edge with enterprise-grade AI — from intelligent automation to real-time analytics, all in one platform.</p>
+        <div class="hero-actions">
+          <a href="#" class="btn-primary btn-large">Get started free</a>
+          <a href="#how" class="btn-ghost">See how it works →</a>
+        </div>
+        <p class="hero-note" style="margin-top:16px">No credit card required · Free 14-day trial</p>
+      </div>
+      <div class="hero-visual fade-up" style="transition-delay:0.15s">
+        <div class="hero-card">
+          <div class="card-header">
+            <div class="card-avatar">W</div>
+            <div>
+              <div class="card-title">Weben Intelligence</div>
+              <div class="card-sub">Live dashboard · Updated now</div>
+            </div>
+          </div>
+          <div class="card-metric">
+            <div class="metric-box">
+              <div class="metric-val up">↑ 38%</div>
+              <div class="metric-label">Efficiency</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val">4.2k</div>
+              <div class="metric-label">Requests/hr</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val up">99.9%</div>
+              <div class="metric-label">Uptime</div>
+            </div>
+          </div>
+          <div class="card-bar-label"><span>AI Tasks Completed</span><span>84%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:84%"></div></div>
+          <div class="card-bar-label"><span>Data Processed</span><span>61%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:61%; animation-delay:0.3s"></div></div>
+          <div class="tag-row">
+            <span class="tag">Automation</span>
+            <span class="tag">NLP</span>
+            <span class="tag">Analytics</span>
+            <span class="tag">API-ready</span>
+          </div>
+        </div>
+        <div class="float-badge">
+          <div class="float-icon">✅</div>
+          <div>
+            <div style="font-size:13px;font-weight:600">Task completed</div>
+            <div style="font-size:11px;color:var(--ink-mute)">Just now · 0.3s response</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGOS -->
+  <div class="logos-section">
+    <div class="logos-inner">
+      <span class="logos-label">Trusted by teams at</span>
+      <div class="logos-list">
+        <span class="logo-item">Nexora</span>
+        <span class="logo-item">Stacklify</span>
+        <span class="logo-item">Driftco</span>
+        <span class="logo-item">Vaultra</span>
+        <span class="logo-item">Luminex</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section">
+      <div class="section-header fade-up">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Everything your team needs<br/>to move faster</h2>
+        <p class="section-sub">Weben combines powerful AI services with a SaaS platform that's easy to deploy and even easier to scale.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card fade-up">
+          <div class="feature-icon">🧠</div>
+          <div class="feature-title">Intelligent Automation</div>
+          <p class="feature-desc">Automate repetitive workflows with AI that learns your business processes and gets smarter over time.</p>
+        </div>
+        <div class="feature-card fade-up" style="transition-delay:0.1s">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Real-Time Analytics</div>
+          <p class="feature-desc">Gain instant insights from your data with AI-powered dashboards that surface what matters most.</p>
+        </div>
+        <div class="feature-card fade-up" style="transition-delay:0.2s">
+          <div class="feature-icon">🔗</div>
+          <div class="feature-title">API-First Architecture</div>
+          <p class="feature-desc">Integrate Weben into any stack with our clean REST API and SDKs for all major languages.</p>
+        </div>
+        <div class="feature-card fade-up" style="transition-delay:0.05s">
+          <div class="feature-icon">🔒</div>
+          <div class="feature-title">Enterprise Security</div>
+          <p class="feature-desc">SOC 2 Type II certified, with role-based access, SSO, and end-to-end encryption built in.</p>
+        </div>
+        <div class="feature-card fade-up" style="transition-delay:0.15s">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Sub-Second Response</div>
+          <p class="feature-desc">Our global edge network ensures your AI requests are processed in under 300ms, anywhere in the world.</p>
+        </div>
+        <div class="feature-card fade-up" style="transition-delay:0.25s">
+          <div class="feature-icon">🌐</div>
+          <div class="feature-title">Multi-Tenant SaaS</div>
+          <p class="feature-desc">Deploy for your entire organization or offer Weben's capabilities to your own customers — white-label ready.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-bg" id="how">
+    <div class="how-section">
+      <div class="section-header fade-up">
+        <div class="section-label">How it works</div>
+        <h2 class="section-title">Up and running<br/>in three steps</h2>
+        <p class="section-sub">No complex setup. No engineering team required. Weben is designed to be live the same day you sign up.</p>
+      </div>
+      <div class="steps">
+        <div class="step fade-up">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <div class="step-title">Connect your data</div>
+            <p class="step-desc">Link your existing tools — CRM, database, spreadsheets — via our one-click integrations or API. Weben ingests and structures your data automatically.</p>
+          </div>
+        </div>
+        <div class="step fade-up" style="transition-delay:0.1s">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <div class="step-title">Configure AI workflows</div>
+            <p class="step-desc">Use our no-code workflow builder to define what Weben should automate, analyse, or generate — no machine learning expertise needed.</p>
+          </div>
+        </div>
+        <div class="step fade-up" style="transition-delay:0.2s">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <div class="step-title">Deploy & measure</div>
+            <p class="step-desc">Go live instantly and track performance in your dashboard. Weben learns continuously, so results improve the more you use it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="section">
+      <div class="section-header fade-up" style="text-align:center">
+        <div class="section-label">Pricing</div>
+        <h2 class="section-title">Simple, transparent pricing</h2>
+        <p class="section-sub" style="margin:0 auto">Start for free and scale as you grow. No hidden fees, no surprises.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card fade-up">
+          <div class="plan-name">Starter</div>
+          <div class="plan-price"><sup>$</sup>0</div>
+          <div class="plan-period">Free forever</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> 1,000 AI requests / mo</li>
+            <li><span class="check">✓</span> 3 workflow automations</li>
+            <li><span class="check">✓</span> Basic analytics</li>
+            <li><span class="check">✓</span> Community support</li>
+          </ul>
+          <button class="btn-outline">Get started free</button>
+        </div>
+        <div class="pricing-card featured fade-up" style="transition-delay:0.1s">
+          <div class="plan-name">Pro</div>
+          <div class="plan-price"><sup>$</sup>49</div>
+          <div class="plan-period">per seat / month</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> 50,000 AI requests / mo</li>
+            <li><span class="check">✓</span> Unlimited automations</li>
+            <li><span class="check">✓</span> Real-time analytics</li>
+            <li><span class="check">✓</span> API access + SDKs</li>
+            <li><span class="check">✓</span> Priority support</li>
+          </ul>
+          <button class="btn-featured">Start 14-day trial</button>
+        </div>
+        <div class="pricing-card fade-up" style="transition-delay:0.2s">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price" style="font-size:36px;letter-spacing:-1px">Custom</div>
+          <div class="plan-period">Contact us for pricing</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> Unlimited everything</li>
+            <li><span class="check">✓</span> SSO + RBAC</li>
+            <li><span class="check">✓</span> SLA guarantee</li>
+            <li><span class="check">✓</span> White-label option</li>
+            <li><span class="check">✓</span> Dedicated account manager</li>
+          </ul>
+          <button class="btn-outline">Talk to sales</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-section fade-up">
+    <div class="cta-box">
+      <h2 class="cta-title">Ready to work smarter<br/>with AI?</h2>
+      <p class="cta-sub">Join thousands of teams using Weben to automate, analyse, and accelerate.</p>
+      <a href="#" class="btn-white">Start for free — no card needed</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="logo" href="#">Web<span>en</span></a>
+          <p>AI services and SaaS infrastructure for modern teams. Built to scale from day one.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Changelog</a></li>
+            <li><a href="#">Roadmap</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Developers</h4>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API Reference</a></li>
+            <li><a href="#">SDKs</a></li>
+            <li><a href="#">Status</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2026 Weben. All rights reserved.</span>
+        <span class="footer-copy"><a href="#" style="color:inherit;text-decoration:none;margin-right:20px">Privacy</a><a href="#" style="color:inherit;text-decoration:none">Terms</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Fade-up on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Smooth nav highlight
+    const sections = document.querySelectorAll('section[id], div[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + current ? 'var(--ink)' : '';
+      });
+    });
+  </script>
+</body>
+</html>
